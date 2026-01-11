@@ -6,8 +6,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useUser } from '@/lib/userContext';
-import { useAllBookings } from '@/hooks/useBookings';
 import { format } from 'date-fns';
+import { BookingWithParticipants } from '@/types/booking';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -16,7 +16,6 @@ interface Message {
 
 export function AIAssistant() {
   const { user } = useUser();
-  const { bookings } = useAllBookings();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -26,7 +25,42 @@ export function AIAssistant() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [bookings, setBookings] = useState<BookingWithParticipants[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Fetch bookings when assistant opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchBookings();
+    }
+  }, [isOpen]);
+
+  const fetchBookings = async () => {
+    try {
+      const { data: bookingsData, error: bookingsError } = await supabase
+        .from('bookings')
+        .select('*')
+        .order('date', { ascending: true });
+
+      if (bookingsError) throw bookingsError;
+
+      const { data: participantsData, error: participantsError } = await supabase
+        .from('booking_participants')
+        .select('*');
+
+      if (participantsError) throw participantsError;
+
+      const bookingsWithParticipants = (bookingsData || []).map((booking) => ({
+        ...booking,
+        session_type: booking.session_type as 'open' | 'closed',
+        participants: (participantsData || []).filter((p) => p.booking_id === booking.id),
+      }));
+
+      setBookings(bookingsWithParticipants);
+    } catch (error) {
+      console.error('Failed to fetch bookings:', error);
+    }
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
