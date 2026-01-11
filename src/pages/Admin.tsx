@@ -9,13 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Trash2, Users, Lock, Calendar, Clock, UserCheck } from 'lucide-react';
 import { format } from 'date-fns';
 
-const Admin = () => {
-  const { isLoggedIn } = useUser();
+function AdminDashboard() {
   const { bookings, isLoading, deleteBooking } = useAllBookings();
-
-  if (!isLoggedIn) {
-    return <LoginForm />;
-  }
 
   const totalBookings = bookings.length;
   const openSessions = bookings.filter((b) => b.session_type === 'open').length;
@@ -161,6 +156,16 @@ const Admin = () => {
       </main>
     </div>
   );
+}
+
+const Admin = () => {
+  const { isLoggedIn } = useUser();
+
+  if (!isLoggedIn) {
+    return <LoginForm />;
+  }
+
+  return <AdminDashboard />;
 };
 
 export default Admin;

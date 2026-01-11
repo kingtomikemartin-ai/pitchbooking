@@ -9,8 +9,7 @@ import { BookingList } from '@/components/BookingList';
 import { AIAssistant } from '@/components/AIAssistant';
 import { supabase } from '@/integrations/supabase/client';
 
-const Index = () => {
-  const { isLoggedIn } = useUser();
+function BookingDashboard() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const { bookings, isLoading, refetch } = useBookings(selectedDate);
 
@@ -34,10 +33,6 @@ const Index = () => {
       supabase.removeChannel(channel);
     };
   }, [refetch]);
-
-  if (!isLoggedIn) {
-    return <LoginForm />;
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,6 +67,16 @@ const Index = () => {
       <AIAssistant />
     </div>
   );
+}
+
+const Index = () => {
+  const { isLoggedIn } = useUser();
+
+  if (!isLoggedIn) {
+    return <LoginForm />;
+  }
+
+  return <BookingDashboard />;
 };
 
 export default Index;
