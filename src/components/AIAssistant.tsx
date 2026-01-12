@@ -2,10 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bot, Send, X, MessageSquare, Loader2, Calendar, Clock, Users } from 'lucide-react';
+import { Bot, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useUser } from '@/lib/userContext';
-import { format, addDays, isWeekend, setHours, isBefore, isAfter } from 'date-fns';
+import { format, addDays, isWeekend, setHours } from 'date-fns';
 import { BookingWithParticipants } from '@/types/booking';
 
 interface Message {
