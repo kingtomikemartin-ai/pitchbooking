@@ -21,6 +21,7 @@ export type Database = {
           joined_at: string
           player_level: string
           player_name: string
+          user_id: string | null
         }
         Insert: {
           booking_id: string
@@ -28,6 +29,7 @@ export type Database = {
           joined_at?: string
           player_level: string
           player_name: string
+          user_id?: string | null
         }
         Update: {
           booking_id?: string
@@ -35,6 +37,7 @@ export type Database = {
           joined_at?: string
           player_level?: string
           player_name?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -57,6 +60,7 @@ export type Database = {
           max_players: number | null
           session_type: string
           start_time: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -68,6 +72,7 @@ export type Database = {
           max_players?: number | null
           session_type: string
           start_time: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -79,6 +84,7 @@ export type Database = {
           max_players?: number | null
           session_type?: string
           start_time?: string
+          user_id?: string | null
         }
         Relationships: []
       }
